@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import * as moment from 'moment';
-import Line_Chart from './Line_Chart'
 import '../App.css';
 var api = require('../utils/moltin.js')
 
@@ -38,7 +37,7 @@ class Revenue extends Component {
       var SevenDaysAgo = moment().subtract(7, 'days').calendar();
       var f = moment(SevenDaysAgo).format();
       var n = f.slice(8, 10)
-      console.log(n);
+      //console.log(n);
 
       var OrdersLessThanSevenDaysAgo = this.state.orders.data.filter(function(order) {
         return order.meta.timestamps.created_at.slice(8,10) > n;
@@ -51,7 +50,7 @@ class Revenue extends Component {
     };
 
     return (
-      <p style={{'text-align': 'center'}}>revenue last seven days: ${revenue}</p>
+      <p style={{'texAlign': 'center'}}>revenue last seven days: ${revenue}</p>
     )
   }
 }

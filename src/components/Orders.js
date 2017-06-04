@@ -31,52 +31,40 @@ class Orders extends Component {
   render() {
 
       if(this.state.orders !== null) {
-      //console.log(this.state.orders.data)
 
-      var SevenDaysAgo = moment().subtract(7, 'days').calendar();
-      var f = moment(SevenDaysAgo).format();
-      var n = f.slice(8, 10)
-      //console.log(n);
+      var Today = moment().format('YYYY-MM-DD');
+      var OneDayAgo = moment().subtract(1, 'days').format('YYYY-MM-DD');
+      var TwoDaysAgo = moment().subtract(2, 'days').format('YYYY-MM-DD');
+      var ThreeDaysAgo = moment().subtract(3, 'days').format('YYYY-MM-DD');
+      var FourDaysAgo = moment().subtract(4, 'days').format('YYYY-MM-DD');
+      var FiveDaysAgo = moment().subtract(5, 'days').format('YYYY-MM-DD');
+      var SixDaysAgo = moment().subtract(6, 'days').format('YYYY-MM-DD');
+      var SevenDaysAgo = moment().subtract(7, 'days').format('YYYY-MM-DD');
+
       var OrdersLessThanSevenDaysAgo = this.state.orders.data.filter(function(order) {
-        return order.meta.timestamps.created_at.slice(8,10) > n;
+        return order.meta.timestamps.created_at.slice(0,10) > SevenDaysAgo;
       })
-      console.log(OrdersLessThanSevenDaysAgo);
-
-      var Today = moment().format();
-      var TodaySliced = Today.slice(8,10)
-      var OneDayAgo = moment().subtract(1, 'days');
-      var OneDayAgoFormatted = moment(OneDayAgo).format();
-      var OneDayAgoSliced = OneDayAgoFormatted.slice(8,10);
-      var TwoDaysAgo = moment().subtract(2, 'days');
-      var TwoDaysAgoFormatted = moment(TwoDaysAgo).format();
-      var TwoDaysAgoSliced = TwoDaysAgoFormatted.slice(8,10);
-      var ThreeDaysAgo = moment().subtract(3, 'days');
-      var ThreeDaysAgoFormatted = moment(ThreeDaysAgo).format();
-      var ThreeDaysAgoSliced = ThreeDaysAgoFormatted.slice(8,10);
-      var FourDaysAgo = moment().subtract(4, 'days');
-      var FiveDaysAgo = moment().subtract(5, 'days');
-      var SixDaysAgo = moment().subtract(6, 'days');
 
       var Data = [0, 0, 0, 0, 0, 0, 0]
+
       var result = OrdersLessThanSevenDaysAgo.forEach(function(order) {
-         console.log(order.meta.timestamps.created_at.slice(8,10))
-        // console.log(TodaySliced);
-        switch(order.meta.timestamps.created_at.slice(8,10)) {
-          case TodaySliced : Data[6]++;
-          // case OneDayAgoSliced : Data[5]++;
-          // case TwoDaysAgoSliced : Data[4]++;
-          // case ThreeDaysAgoSliced : Data[3]++;
+         //console.log(order.meta.timestamps.created_at.slice(0,10))
+
+        switch(order.meta.timestamps.created_at.slice(0,10)) {
+          case Today : Data[6]++;
+          case OneDayAgo : Data[5]++;
+          case TwoDaysAgo : Data[4]++;
+          case ThreeDaysAgo : Data[3]++;
+          case FourDaysAgo : Data[2]++;
+          case FiveDaysAgo : Data[1]++;
+          case SixDaysAgo : Data[0]++;
           break;
         }
-
-        //console.log(order.meta.timestamps.created_at.slice(5,7))
-         //console.log(Data)
+        // console.log(Data)
       });
 
-
-
       var chartData = {
-            labels: [moment(SixDaysAgo).format("MMM Do YYYY"), moment(FiveDaysAgo).format("MMM Do YYYY"), moment(FourDaysAgo).format("MMM Do YYYY"), moment(ThreeDaysAgo).format("MMM Do YYYY"), moment(TwoDaysAgo).format("MMM Do YYYY"), moment(OneDayAgo).format("MMM Do YYYY"), moment(Today).calendar()],
+            labels: [moment(moment().subtract(6, 'days')).format("MMM Do YYYY"), moment(moment().subtract(5, 'days')).format("MMM Do YYYY"), moment(moment().subtract(4, 'days')).format("MMM Do YYYY"), moment(moment().subtract(3, 'days')).format("MMM Do YYYY"), moment(moment().subtract(2, 'days')).format("MMM Do YYYY"), moment(moment().subtract(1, 'days')).format("MMM Do YYYY"), moment().calendar()],
             datasets: [{
                 label: '# of Orders',
                 data: Data,
@@ -101,14 +89,14 @@ class Orders extends Component {
       }
 
       var chartOptions = {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
-            }
-        };
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+      };
 
       return (
         <div>
@@ -118,17 +106,13 @@ class Orders extends Component {
           <div style={{float : 'right', width: 50 + '%'}}>
             <Bar_Chart chartData={chartData} chartOptions={chartOptions}/>
           </div>
-
         </div>
-
       )
 
       }
 
     else {
       console.log('no data')
-      //console.log(this.state)
-
       return (
         <p>no data</p>
       )
