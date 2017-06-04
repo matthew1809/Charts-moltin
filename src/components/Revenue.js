@@ -32,15 +32,11 @@ class Revenue extends Component {
     var revenue = 0
 
     if(this.state.orders !== null) {
-    //console.log(this.state.orders.data)
 
-      var SevenDaysAgo = moment().subtract(7, 'days').calendar();
-      var f = moment(SevenDaysAgo).format();
-      var n = f.slice(8, 10)
-      //console.log(n);
+      var SevenDaysAgo = moment().subtract(7, 'days').format('YYYY-MM-DD');
 
       var OrdersLessThanSevenDaysAgo = this.state.orders.data.filter(function(order) {
-        return order.meta.timestamps.created_at.slice(8,10) > n;
+        return order.meta.timestamps.created_at.slice(0,10) > SevenDaysAgo;
       })
 
       var RevenueLessThanSevenDaysAgo = OrdersLessThanSevenDaysAgo.forEach(function(order) {
