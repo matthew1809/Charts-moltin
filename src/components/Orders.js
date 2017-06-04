@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import * as moment from 'moment';
-import Line_Chart from './Line_Chart'
-import Bar_Chart from './Bar_Chart'
+import Line from './Line_Chart'
+import Bar from './Bar_Chart'
 import '../App.css';
-var api = require('../utils/moltin.js')
+import {Tabs, Tab} from 'material-ui/Tabs';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Center from 'react-center';
+var Spinner = require('react-spinkit');
+var api = require('../utils/moltin.js');
 
 class Orders extends Component {
 
@@ -32,33 +36,35 @@ class Orders extends Component {
 
       if(this.state.orders !== null) {
 
+      var past = (days) => {
+        return moment().subtract(days, 'days').format('YYYY-MM-DD');
+      }
       var Today = moment().format('YYYY-MM-DD');
-      var OneDayAgo = moment().subtract(1, 'days').format('YYYY-MM-DD');
-      var TwoDaysAgo = moment().subtract(2, 'days').format('YYYY-MM-DD');
-      var ThreeDaysAgo = moment().subtract(3, 'days').format('YYYY-MM-DD');
-      var FourDaysAgo = moment().subtract(4, 'days').format('YYYY-MM-DD');
-      var FiveDaysAgo = moment().subtract(5, 'days').format('YYYY-MM-DD');
-      var SixDaysAgo = moment().subtract(6, 'days').format('YYYY-MM-DD');
-      var SevenDaysAgo = moment().subtract(7, 'days').format('YYYY-MM-DD');
 
       var OrdersLessThanSevenDaysAgo = this.state.orders.data.filter(function(order) {
-        return order.meta.timestamps.created_at.slice(0,10) > SevenDaysAgo;
+        return order.meta.timestamps.created_at.slice(0,10) > past(7);
       })
 
       var Data = [0, 0, 0, 0, 0, 0, 0]
 
-      var result = OrdersLessThanSevenDaysAgo.forEach(function(order) {
-         //console.log(order.meta.timestamps.created_at.slice(0,10))
+      OrdersLessThanSevenDaysAgo.forEach(function(order) {
 
         switch(order.meta.timestamps.created_at.slice(0,10)) {
           case Today : Data[6]++;
-          case OneDayAgo : Data[5]++;
-          case TwoDaysAgo : Data[4]++;
-          case ThreeDaysAgo : Data[3]++;
-          case FourDaysAgo : Data[2]++;
-          case FiveDaysAgo : Data[1]++;
-          case SixDaysAgo : Data[0]++;
           break;
+          case past(1) : Data[5]++;
+          break;
+          case past(2) : Data[4]++;
+          break;
+          case past(3) : Data[3]++;
+          break;
+          case past(4) : Data[2]++;
+          break;
+          case past(5) : Data[1]++;
+          break;
+          case past(6) : Data[0]++;
+          break;
+          default : return;
         }
         // console.log(Data)
       });
@@ -99,14 +105,20 @@ class Orders extends Component {
       };
 
       return (
-        <div>
-          <div style={{float : 'left', width: 50 + '%'}}>
-            <Line_Chart chartData={chartData} chartOptions={chartOptions}/>
-          </div>
-          <div style={{float : 'right', width: 50 + '%'}}>
-            <Bar_Chart chartData={chartData} chartOptions={chartOptions}/>
-          </div>
-        </div>
+      <MuiThemeProvider>
+        <Tabs>
+          <Tab label="Line Chart" >
+              <div style={{float : 'left', width: 50 + '%'}}>
+                <Line chartData={chartData} chartOptions={chartOptions}/>
+              </div>
+          </Tab>
+          <Tab label="Bar Chart" >
+            <div style={{float : 'right', width: 50 + '%'}}>
+              <Bar chartData={chartData} chartOptions={chartOptions}/>
+            </div>
+          </Tab>
+        </Tabs>
+      </MuiThemeProvider>
       )
 
       }
@@ -114,7 +126,11 @@ class Orders extends Component {
     else {
       console.log('no data')
       return (
-        <p>no data</p>
+      <div style={{height: 100 + '%', width: 100 + '%'}}>
+        <Center style={{paddingTop: 250}}>
+          <Spinner name="ball-spin-fade-loader"/>
+        </Center>
+      </div>
       )
     }
   }
