@@ -34,35 +34,71 @@ class Revenue extends Component {
 
   render() {
 
-    var revenue7 = 0
-    var revenue14 = 0
+    var revenue7 = 0;
+    var revenue14 = 0;
+    var revenueMonth = 0;
+    var revenueTwoMonths = 0;
 
     if(this.state.orders !== null) {
 
-      var SevenDaysAgo = moment().subtract(7, 'days').format('YYYY-MM-DD');
+      var past = (num, frame) => {
+        return moment().subtract(num, frame).format('YYYY-MM-DD');
+      };
+
+      var OrdersLessThanX = (oldNum, oldFrame, newNum, newFrame) => {
+        this.state.orders.data.filter(function(order) {
+          return order.meta.timestamps.created_at.slice(0,10) > past(oldNum, oldFrame) && order.meta.timestamps.created_at.slice(0,10) < past(newNum, newFrame);
+        })
+      }
+
       var OrdersLessThanSevenDaysAgo = this.state.orders.data.filter(function(order) {
-        return order.meta.timestamps.created_at.slice(0,10) > SevenDaysAgo;
+        return order.meta.timestamps.created_at.slice(0,10) > past(7, 'days');;
       })
+
       OrdersLessThanSevenDaysAgo.forEach(function(order) {
         revenue7 = revenue7 + order.meta.display_price.with_tax.amount/100
       })
 
-      var FourteenDaysAgo = moment().subtract(14, 'days').format('YYYY-MM-DD');
       var OrdersLessThanFourteenDaysAgo = this.state.orders.data.filter(function(order) {
-        return order.meta.timestamps.created_at.slice(0,10) > FourteenDaysAgo && order.meta.timestamps.created_at.slice(0,10) < SevenDaysAgo;
+        return order.meta.timestamps.created_at.slice(0,10) > past(14, 'days') && order.meta.timestamps.created_at.slice(0,10) < past(7, 'days');
       })
+
       OrdersLessThanFourteenDaysAgo.forEach(function(order) {
         revenue14 = revenue14 + order.meta.display_price.with_tax.amount/100
       })
 
-      var round_rev7 =  Math.round(revenue7)
+
+      var OrdersLessThanOneMonthAgo = this.state.orders.data.filter(function(order) {
+        return order.meta.timestamps.created_at.slice(0,10) > past(1, 'month');
+      })
+      OrdersLessThanOneMonthAgo.forEach(function(order) {
+        revenueMonth = revenueMonth + order.meta.display_price.with_tax.amount/100
+      })
+
+      var OrdersLessThanTwoMonthAgo = this.state.orders.data.filter(function(order) {
+        return order.meta.timestamps.created_at.slice(0,10) > past(2, 'months');
+      })
+      OrdersLessThanTwoMonthAgo.forEach(function(order) {
+        revenueTwoMonths = revenueTwoMonths + order.meta.display_price.with_tax.amount/100
+      })
+
+      var round_revTwoMonths = Math.round(revenueTwoMonths);
+      var formatted_revTwoMonths = format({prefix: '$'})(round_revTwoMonths);
+
+      var round_revMonth = Math.round(revenueMonth);
+      var formatted_revMonth = format({prefix: '$'})(round_revMonth);
+
+      var round_rev7 =  Math.round(revenue7);
       var formatted_rev7 = format({prefix: '$'})(round_rev7);
-      var round_rev14 = Math.round(revenue14)
+
+      var round_rev14 = Math.round(revenue14);
       var formatted_rev14 = format({prefix: '$'})(round_rev14);
-      var diff = percentDiff(round_rev14, round_rev7, true)
-      // console.log(round_rev7)
-      // console.log(round_rev14)
-      // console.log(diff)
+
+      var diff = percentDiff(round_rev14, round_rev7, true);
+
+
+      //  console.log(round_revMonth)
+      //  console.log(round_revTwoMonths)
 
       return (
         <div style={{paddingTop: 50, width: 100 + '%', height: 100 + '%'}}>
@@ -93,13 +129,16 @@ class Revenue extends Component {
                 <Center>
                   <Card>
                     <div style={{textAlign: 'center', paddingTop: 5}}>
-                    <Icon name='percent icon' size='large'/>
+                    <Icon name='percent' size='large'/>
                     </div>
-                    <Statistic value={diff} color='violet' label='% difference' style={{paddingBottom: 5}}/>
+                    <Statistic value={diff} color='violet' label='Difference' style={{paddingBottom: 5}}/>
                   </Card>
                 </Center>
               </Col>
             </Row>
+
+
+
           </Grid>
         </div>
       )

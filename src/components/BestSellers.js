@@ -31,31 +31,6 @@ class BestSellers extends Component {
   render() {
 
     if(this.state.orders !== null) {
-      //var Data = [0, 0, 0]
-
-      //var orders = this.state.orders.data;
-
-      // var SevenDaysAgo = moment().subtract(7, 'days').format('YYYY-MM-DD');
-
-      // var OrdersLessThanSevenDaysAgo = this.state.orders.data.filter(function(order) {
-      //   return order.meta.timestamps.created_at.slice(0,10) > SevenDaysAgo;
-      // })
-
-      // var status = orders.forEach(function(order) {
-      //    var shipping_status = order.shipping;
-      //
-      //   switch(shipping_status) {
-      //     case 'not_shipped' : Data[2]++;
-      //     break;
-      //     case 'partial' : Data[1]++;
-      //     break;
-      //     case 'shipped' : Data[0]++;
-      //     break;
-      //     default : return;
-      //   }
-      //
-      //   console.log(Data)
-      // });
 
       return (
       <Center style={{paddingTop: 100}}>
@@ -75,7 +50,7 @@ class BestSellers extends Component {
                   <Image src='/assets/images/avatar/small/lena.png' shape='rounded' size='mini' />
                   <Header.Content>
                     Product A
-                    <Header.Subheader>Human Resources</Header.Subheader>
+                    <Header.Subheader>Description</Header.Subheader>
                   </Header.Content>
                 </Header>
               </Table.Cell>
@@ -92,7 +67,7 @@ class BestSellers extends Component {
                   <Image src='/assets/images/avatar/small/matthew.png' shape='rounded' size='mini' />
                   <Header.Content>
                     Product B
-                    <Header.Subheader>Fabric Design</Header.Subheader>
+                    <Header.Subheader>Description</Header.Subheader>
                   </Header.Content>
                 </Header>
               </Table.Cell>
@@ -109,7 +84,7 @@ class BestSellers extends Component {
                   <Image src='/assets/images/avatar/small/lindsay.png' shape='rounded' size='mini' />
                   <Header.Content>
                     Product C
-                    <Header.Subheader>Entertainment</Header.Subheader>
+                    <Header.Subheader>Description</Header.Subheader>
                   </Header.Content>
                 </Header>
               </Table.Cell>
@@ -125,8 +100,8 @@ class BestSellers extends Component {
                 <Header as='h4' image>
                   <Image src='/assets/images/avatar/small/mark.png' shape='rounded' size='mini' />
                   <Header.Content>
-                    Mark
-                    <Header.Subheader>Executive</Header.Subheader>
+                    Product D
+                    <Header.Subheader>Description</Header.Subheader>
                   </Header.Content>
                 </Header>
               </Table.Cell>
