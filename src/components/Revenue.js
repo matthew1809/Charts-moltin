@@ -45,48 +45,50 @@ class Revenue extends Component {
         return moment().subtract(num, frame).format('YYYY-MM-DD');
       };
 
-      var OrdersLessThanX = (oldNum, oldFrame, newNum, newFrame) => {
-        this.state.orders.data.filter(function(order) {
-          return order.meta.timestamps.created_at.slice(0,10) > past(oldNum, oldFrame) && order.meta.timestamps.created_at.slice(0,10) < past(newNum, newFrame);
-        })
-      }
+      // var OrdersLessThanX = (oldNum, oldFrame, newNum, newFrame) => {
+      //   this.state.orders.data.filter(function(order) {
+      //     return order.meta.timestamps.created_at.slice(0,10) > past(oldNum, oldFrame) && order.meta.timestamps.created_at.slice(0,10) < past(newNum, newFrame);
+      //   })
+      // }
 
       var OrdersLessThanSevenDaysAgo = this.state.orders.data.filter(function(order) {
-        return order.meta.timestamps.created_at.slice(0,10) > past(7, 'days');;
-      })
+        return order.meta.timestamps.created_at.slice(0,10) > past(7, 'days');
+      });
 
       OrdersLessThanSevenDaysAgo.forEach(function(order) {
         revenue7 = revenue7 + order.meta.display_price.with_tax.amount/100
-      })
+      });
 
       var OrdersLessThanFourteenDaysAgo = this.state.orders.data.filter(function(order) {
         return order.meta.timestamps.created_at.slice(0,10) > past(14, 'days') && order.meta.timestamps.created_at.slice(0,10) < past(7, 'days');
-      })
+      });
 
       OrdersLessThanFourteenDaysAgo.forEach(function(order) {
         revenue14 = revenue14 + order.meta.display_price.with_tax.amount/100
-      })
+      });
 
 
       var OrdersLessThanOneMonthAgo = this.state.orders.data.filter(function(order) {
         return order.meta.timestamps.created_at.slice(0,10) > past(1, 'month');
-      })
+      });
+
       OrdersLessThanOneMonthAgo.forEach(function(order) {
         revenueMonth = revenueMonth + order.meta.display_price.with_tax.amount/100
-      })
+      });
 
       var OrdersLessThanTwoMonthAgo = this.state.orders.data.filter(function(order) {
         return order.meta.timestamps.created_at.slice(0,10) > past(2, 'months');
-      })
+      });
+
       OrdersLessThanTwoMonthAgo.forEach(function(order) {
         revenueTwoMonths = revenueTwoMonths + order.meta.display_price.with_tax.amount/100
-      })
+      });
 
-      var round_revTwoMonths = Math.round(revenueTwoMonths);
-      var formatted_revTwoMonths = format({prefix: '$'})(round_revTwoMonths);
-
-      var round_revMonth = Math.round(revenueMonth);
-      var formatted_revMonth = format({prefix: '$'})(round_revMonth);
+      // var round_revTwoMonths = Math.round(revenueTwoMonths);
+      // var formatted_revTwoMonths = format({prefix: '$'})(round_revTwoMonths);
+      //
+      // var round_revMonth = Math.round(revenueMonth);
+      // var formatted_revMonth = format({prefix: '$'})(round_revMonth);
 
       var round_rev7 =  Math.round(revenue7);
       var formatted_rev7 = format({prefix: '$'})(round_rev7);
@@ -95,7 +97,6 @@ class Revenue extends Component {
       var formatted_rev14 = format({prefix: '$'})(round_rev14);
 
       var diff = percentDiff(round_rev14, round_rev7, true);
-
 
       //  console.log(round_revMonth)
       //  console.log(round_revTwoMonths)
@@ -136,8 +137,6 @@ class Revenue extends Component {
                 </Center>
               </Col>
             </Row>
-
-
 
           </Grid>
         </div>

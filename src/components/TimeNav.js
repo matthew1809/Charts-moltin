@@ -2,13 +2,19 @@ import React, { Component } from 'react';
 import { Menu } from 'semantic-ui-react';
 
 class TimeNav extends Component {
-  state = {}
+
+    constructor(props) {
+      super();
+      this.state = {time: null};
+    }
+
+    componentDidMount() {
+    };
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
   render() {
     const { activeItem } = this.state
-
 
     return (
       <Menu.Menu position='right'>

@@ -1,11 +1,18 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import { Provider } from 'react-redux';
+import { render } from 'react-dom';
+//import registerServiceWorker from './registerServiceWorker';
+import { createStore } from 'redux';
+import ChartsApp from './reducers/reducers.js';
 import 'semantic-ui-css/semantic.min.css';
 import './index.css';
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css"></link>;
+let store = createStore(ChartsApp)
 
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+   document.getElementById('root')
+  );

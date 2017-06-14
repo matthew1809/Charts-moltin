@@ -30,7 +30,6 @@ class Nav extends Component {
             <TimeNav />
           </Menu>
 
-
           <Route exact path="/" component={Orders}/>
           <Route path="/revenue" component={Revenue}/>
           <Route path="/best-sellers" component={BestSellers}/>
