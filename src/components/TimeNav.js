@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Menu } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 
 class TimeNav extends Component {
 
@@ -8,10 +9,13 @@ class TimeNav extends Component {
       this.state = {time: null};
     }
 
-    componentDidMount() {
-    };
+  handleItemClick = (e, { name }) => {
+    this.setState({ activeItem: name })
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+    this.props.dispatch((dispatch) => {
+      dispatch({type: name, payload: name})
+    })
+  }
 
   render() {
     const { activeItem } = this.state
@@ -30,4 +34,4 @@ class TimeNav extends Component {
   }
 };
 
-export default TimeNav;
+export default connect()(TimeNav);

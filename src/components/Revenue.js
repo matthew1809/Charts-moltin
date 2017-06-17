@@ -1,46 +1,35 @@
 import React, { Component } from 'react';
 import * as moment from 'moment';
+import { connect } from 'react-redux';
 import '../App.css';
 import Center from 'react-center';
 import { Statistic, Card, Icon } from 'semantic-ui-react'
 import * as Spinner from 'react-spinkit';
 import { Grid, Row, Col } from 'react-bootstrap';
 import {percentDiff} from 'percentage-difference';
-var api = require('../utils/moltin.js')
 var format = require('format-number');
+
+const mapStateToProps = state => {
+  return {
+    orders: state.orders
+  }
+}
 
 class Revenue extends Component {
 
   constructor(props) {
     super();
-    this.state = {orders: null};
-  }
-
-  componentDidMount() {
-    api.GetOrders()
-    .then((orders) => {
-      this.setState(() => {
-        return {
-          orders: orders
-        }
-      })
-    })
-
-    .catch((error) => {
-      console.log(error)
-    })
-
   }
 
   render() {
 
+    var revenue24h = 0;
     var revenue7 = 0;
     var revenue14 = 0;
-    var revenueMonth = 0;
-    var revenueTwoMonths = 0;
+    var orderData = this.props.orders.orders;
 
-    if(this.state.orders !== null) {
-
+    if(orderData !== null) {
+      console.log(this.props)
       var past = (num, frame) => {
         return moment().subtract(num, frame).format('YYYY-MM-DD');
       };
@@ -51,7 +40,15 @@ class Revenue extends Component {
       //   })
       // }
 
-      var OrdersLessThanSevenDaysAgo = this.state.orders.data.filter(function(order) {
+      var OrdersLessThanTwentyFourHoursAgo = orderData.data.filter(function(order) {
+        return order.meta.timestamps.created_at.slice(0,10) > past(24, 'hours');
+      });
+
+      OrdersLessThanTwentyFourHoursAgo.forEach(function(order) {
+        revenue24h = revenue24h + order.meta.display_price.with_tax.amount/100
+      });
+
+      var OrdersLessThanSevenDaysAgo = orderData.data.filter(function(order) {
         return order.meta.timestamps.created_at.slice(0,10) > past(7, 'days');
       });
 
@@ -59,7 +56,7 @@ class Revenue extends Component {
         revenue7 = revenue7 + order.meta.display_price.with_tax.amount/100
       });
 
-      var OrdersLessThanFourteenDaysAgo = this.state.orders.data.filter(function(order) {
+      var OrdersLessThanFourteenDaysAgo = orderData.data.filter(function(order) {
         return order.meta.timestamps.created_at.slice(0,10) > past(14, 'days') && order.meta.timestamps.created_at.slice(0,10) < past(7, 'days');
       });
 
@@ -67,28 +64,8 @@ class Revenue extends Component {
         revenue14 = revenue14 + order.meta.display_price.with_tax.amount/100
       });
 
-
-      var OrdersLessThanOneMonthAgo = this.state.orders.data.filter(function(order) {
-        return order.meta.timestamps.created_at.slice(0,10) > past(1, 'month');
-      });
-
-      OrdersLessThanOneMonthAgo.forEach(function(order) {
-        revenueMonth = revenueMonth + order.meta.display_price.with_tax.amount/100
-      });
-
-      var OrdersLessThanTwoMonthAgo = this.state.orders.data.filter(function(order) {
-        return order.meta.timestamps.created_at.slice(0,10) > past(2, 'months');
-      });
-
-      OrdersLessThanTwoMonthAgo.forEach(function(order) {
-        revenueTwoMonths = revenueTwoMonths + order.meta.display_price.with_tax.amount/100
-      });
-
-      // var round_revTwoMonths = Math.round(revenueTwoMonths);
-      // var formatted_revTwoMonths = format({prefix: '$'})(round_revTwoMonths);
-      //
-      // var round_revMonth = Math.round(revenueMonth);
-      // var formatted_revMonth = format({prefix: '$'})(round_revMonth);
+      // var round_rev24h =  Math.round(revenue24h);
+      // var formatted_rev24h = format({prefix: '$'})(round_rev24h);
 
       var round_rev7 =  Math.round(revenue7);
       var formatted_rev7 = format({prefix: '$'})(round_rev7);
@@ -98,7 +75,7 @@ class Revenue extends Component {
 
       var diff = percentDiff(round_rev14, round_rev7, true);
 
-      //  console.log(round_revMonth)
+      //  console.log(round_rev24h)
       //  console.log(round_revTwoMonths)
 
       return (
@@ -155,4 +132,4 @@ class Revenue extends Component {
   }
 }
 
-  export default Revenue;
+  export default connect(mapStateToProps)(Revenue);
