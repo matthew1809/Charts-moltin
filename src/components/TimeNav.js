@@ -1,14 +1,24 @@
 import React, { Component } from 'react';
 import { Menu } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 
 class TimeNav extends Component {
-  state = {}
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+    constructor(props) {
+      super();
+      this.state = {time: null};
+    }
+
+  handleItemClick = (e, { name }) => {
+    this.setState({ activeItem: name })
+
+    this.props.dispatch((dispatch) => {
+      dispatch({type: name, payload: name})
+    })
+  }
 
   render() {
     const { activeItem } = this.state
-
 
     return (
       <Menu.Menu position='right'>
@@ -24,4 +34,4 @@ class TimeNav extends Component {
   }
 };
 
-export default TimeNav;
+export default connect()(TimeNav);

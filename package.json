@@ -20,6 +20,9 @@
     "react-router-dom": "^4.1.1",
     "react-spinkit": "^3.0.0",
     "react-tap-event-plugin": "^2.0.1",
+    "redux-logger": "^3.0.6",
+    "redux-promise": "^0.5.3",
+    "redux-thunk": "^2.2.0",
     "semantic-ui-css": "^2.2.10",
     "semantic-ui-react": "^0.68.5"
   },
